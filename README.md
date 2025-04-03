@@ -67,5 +67,5 @@ These workflows sync your modrinth releases when you do the following on GitHub:
                 MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
     ```
 3. Replace the `project_id` in all actions with your Modrinth project's id.
-4. Replace `game_verions`, `loaders`, and `dependencies` under `upload-release` with the correct data for your Modrinth project.
+4. Replace `game_versions`, `loaders`, and `dependencies` under `publish-release` with the correct data for your Modrinth project.
 5. Commit the changes.
