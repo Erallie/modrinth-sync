@@ -27,7 +27,7 @@ These workflows sync your modrinth releases when you do the following on GitHub:
                 - main
 
     jobs:
-        upload-release:
+        publish-release:
             if: github.event_name == 'release' && github.event.action == 'published'
             uses: Erallie/modrinth-sync/.github/workflows/publish-release.yml@main
             with:
