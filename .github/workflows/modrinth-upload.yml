@@ -1,32 +1,14 @@
 name: Upload to Modrinth
 
 on:
-    workflow_call:
-        inputs:
-            project_id:
-                required: true
-                type: string
-            game_versions:
-                required: true
-                type: string
-            loaders:
-                required: true
-                type: string
-            dependencies:
-                required: false
-                type: string
-        secrets:
-            MODRINTH_TOKEN:
-                required: true
+    release:
+        types: [published]
 
 jobs:
     upload-to-modrinth:
         runs-on: ubuntu-latest
 
         steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-
           - name: Get JAR asset name from release
             id: get-jar
             env:
@@ -73,10 +55,7 @@ jobs:
                         echo "ℹ️ Not latest — not featured"
                         featured=false
                     fi
-                fi
-
-                dependencies="${{ inputs.dependencies }}"
-                [ -z "$dependencies" ] && dependencies="[]"
+                fi                
 
                 jq -Rs \
                 --arg name "${{ github.event.release.name }}" \
@@ -84,19 +63,16 @@ jobs:
                 --arg file "$ASSET_NAME" \
                 --arg channel "$channel" \
                 --argjson featured "$featured" \
-                --argjson game_versions '${{ inputs.game_versions }}' \
-                --argjson loaders '${{ inputs.loaders }}' \
-                --argjson dependencies "$dependencies" \
                 '{
                     name: $name,
                     version_number: $version,
-                    project_id: "${{ inputs.project_id }}",
-                    game_versions: $game_versions,
-                    loaders: $loaders,
+                    project_id: "zE5EbgF4",
+                    game_versions: ["1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4"],
+                    loaders: ["spigot", "paper", "purpur"],
                     featured: $featured,
                     release_channel: $channel,
                     changelog: .,
-                    dependencies: $dependencies,
+                    dependencies: [],
                     file_parts: [$file]
                 }' < changelog.txt > version.json
 

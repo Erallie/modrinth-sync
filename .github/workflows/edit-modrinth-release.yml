@@ -1,14 +1,8 @@
 name: Edit Modrinth Release
 
 on:
-    workflow_call:
-        inputs:
-            project_id:
-                required: true
-                type: string
-        secrets:
-            MODRINTH_TOKEN:
-                required: true
+    release:
+        types: [edited]
 
 jobs:
     edit-modrinth:
@@ -27,7 +21,7 @@ jobs:
                 echo "RELEASE_NAME=$(echo "$release_info" | jq -r '.name')" >> $GITHUB_ENV
                 echo "RELEASE_TAG=$(echo "$release_info" | jq -r '.tag_name')" >> $GITHUB_ENV
                 echo "IS_PRERELEASE=$(echo "$release_info" | jq -r '.prerelease')" >> $GITHUB_ENV
-                echo "IS_LATEST=$(echo "$release_info" | jq -r '.is_latest')" >> $GITHUB_ENV
+                echo "IS_LATEST=$(echo "$release_info" | jq -r '.is_latest')" >>      $GITHUB_ENV
 
           - name: Find Modrinth version ID
             env:
@@ -35,7 +29,7 @@ jobs:
             run: |
                 echo "Looking for Modrinth version with tag: $RELEASE_TAG"
 
-                PROJECT_ID="${{ inputs.project_id }}"
+                PROJECT_ID="zE5EbgF4"
                 VERSION_DATA=$(curl -s -H "Authorization: $MODRINTH_TOKEN" https://api.modrinth.com/v2/project/$PROJECT_ID/version)
                 VERSION_JSON=$(echo "$VERSION_DATA" | jq -r --arg TAG "$RELEASE_TAG" '.[] | select(.version_number == $TAG)')
 

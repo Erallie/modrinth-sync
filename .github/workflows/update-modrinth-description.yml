@@ -1,18 +1,9 @@
 name: Update Modrinth Description
 
 on:
-    workflow_call:
-        inputs:
-            project_id:
-                required: true
-                type: string
-            file:
-                required: false
-                default: "README.md"
-                type: string
-        secrets:
-            MODRINTH_TOKEN:
-                required: true
+    push:
+        branches:
+            - main
 
 jobs:
     update-description:
@@ -29,10 +20,11 @@ jobs:
                 set -e
 
                 echo "Preparing description payload..."
-                jq -Rs '{ body: . }' < "${{ inputs.file }}" > body.json
+                jq -Rs '{ body: . }' < README.md > body.json
 
                 echo "Sending PATCH request to Modrinth..."
-                response=$(curl -s -w "\n%{http_code}" -X PATCH https://api.modrinth.com/v2/project/${{ inputs.project_id }} \
+
+                response=$(curl -s -w "\n%{http_code}" -X PATCH https://api.modrinth.com/v2/project/zE5EbgF4 \
                     -H "Authorization: $MODRINTH_TOKEN" \
                     -H "Content-Type: application/json" \
                     --data @body.json)
