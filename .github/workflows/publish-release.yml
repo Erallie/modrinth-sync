@@ -75,7 +75,7 @@ jobs:
                     fi
                 fi
 
-                dependencies="${{ inputs.dependencies }}"
+                dependencies='${{ inputs.dependencies }}'
                 [ -z "$dependencies" ] && dependencies="[]"
 
                 jq -Rs \
@@ -83,10 +83,10 @@ jobs:
                 --arg version "${{ github.ref_name }}" \
                 --arg file "$ASSET_NAME" \
                 --arg channel "$channel" \
-                --argjson featured $featured \
-                --argjson game_versions ${{ inputs.game_versions }} \
-                --argjson loaders ${{ inputs.loaders }} \
-                --argjson dependencies $dependencies \
+                --argjson featured "$featured" \
+                --argjson game_versions '${{ inputs.game_versions }}' \
+                --argjson loaders '${{ inputs.loaders }}' \
+                --argjson dependencies "$dependencies" \
                 '{
                     name: $name,
                     version_number: $version,
