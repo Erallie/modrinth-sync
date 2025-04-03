@@ -1,8 +1,14 @@
 name: Delete Modrinth Release
 
 on:
-    release:
-        types: [deleted]
+    workflow_call:
+        inputs:
+            project_id:
+                required: true
+                type: string
+        secrets:
+            MODRINTH_TOKEN:
+                required: true
 
 jobs:
     delete-modrinth:
@@ -15,9 +21,9 @@ jobs:
             run: |
                 set -e
 
+                PROJECT_ID="${{ inputs.project_id }}"
                 echo "Looking for Modrinth version with tag: $RELEASE_TAG"
 
-                PROJECT_ID="zE5EbgF4"
                 API_URL="https://api.modrinth.com/v2/project/$PROJECT_ID/version"
 
                 VERSION_DATA=$(curl -s -H "Authorization: $MODRINTH_TOKEN" "$API_URL")
